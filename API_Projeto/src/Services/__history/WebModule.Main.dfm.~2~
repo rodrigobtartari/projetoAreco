@@ -1,0 +1,11 @@
+object wmMain: TwmMain
+  OnCreate = WebModuleCreate
+  OnDestroy = WebModuleDestroy
+  Actions = <>
+  Height = 230
+  Width = 415
+  object FDConnection1: TFDConnection
+    Left = 80
+    Top = 64
+  end
+end

@@ -1,0 +1,129 @@
+unit Controller.Produto;
+
+interface
+
+uses
+  MVCFramework,
+  MVCFramework.Commons,
+  MVCFramework.Serializer.Commons,
+  System.Generics.Collections,
+  Entity.Produto,
+  FireDAC.Comp.Client,
+  FireDAC.Phys.MSSQL;
+
+  type
+  [MVCPath('/api')]
+  TControllerProduto = class(TMVCController)
+  private
+    FDConn : TFDConnection;
+  public
+    [MVCPath('/produtos')]
+    [MVCHTTPMethod([httpGET])]
+    procedure GetProdutos(ctx: TWebContext);
+
+    [MVCPath('/produtos')]
+    [MVCHTTPMethod([httpPOST])]
+    procedure AddProduto(ctx: TWebContext);
+
+    [MVCPath('/produtos/{id}')]
+    [MVCHTTPMethod([httpGET])]
+    procedure GetProduto(ctx: TWebContext);
+
+    [MVCPath('/produtos/{id}')]
+    [MVCHTTPMethod([httpPUT])]
+    procedure UpdateProduto(ctx: TWebContext);
+
+    [MVCPath('/produtos/{id}')]
+    [MVCHTTPMethod([httpDELETE])]
+    procedure DeleteProduto(ctx: TWebContext);
+
+    constructor create; override;
+  end;
+
+implementation
+
+uses
+  MVCFramework.Serializer.Intf, System.SysUtils,
+  MVCFramework.ActiveRecord, MVCFramework.DataSet.Utils;
+
+{ TControllerProduto }
+
+procedure TControllerProduto.AddProduto(ctx: TWebContext);
+var
+  Produto: TProduto;
+begin
+  Produto := ctx.Request.BodyAs<TProduto>;
+  try
+//    Produto.Insert;
+    Render(201, 'Produto adicionado com sucesso.');
+  finally
+    Produto.Free;
+  end;
+end;
+
+constructor TControllerProduto.create;
+begin
+  inherited;
+  FDConn := TFDConnection.Create(nil);
+  FDConn.Params.Clear;
+  FDConn.Params.Database := 'D:\Dev\Projeto\DATA\PRODUTOS.mdf';
+  FDConn.DriverName := 'MSSQL';
+  FDConn.Connected := True;
+
+  ActiveRecordConnectionsRegistry.AddDefaultConnection(FDConn);
+end;
+
+procedure TControllerProduto.DeleteProduto(ctx: TWebContext);
+var
+  Produto: TProduto;
+begin
+//  Produto := TProduto.FindOne(ctx.Request.Params['id'].ToInt);
+  try
+    if Assigned(Produto) then
+    begin
+//      Produto.Delete;
+      Render(204, 'Produto excluído com sucesso.');
+    end
+    else
+      Render(404, 'Produto não encontrado.');
+  finally
+    Produto.Free;
+  end;
+end;
+
+procedure TControllerProduto.GetProduto(ctx: TWebContext);
+var
+  Produto: TProduto;
+begin
+//  Produto := TProduto.FindOne(ctx.Request.Params['id'].ToInt);
+  try
+    if Assigned(Produto) then
+//      Render<TProduto>(Produto)
+    else
+      Render(404, 'Produto não encontrado.');
+  finally
+    Produto.Free;
+  end;
+end;
+
+procedure TControllerProduto.GetProdutos(ctx: TWebContext);
+begin
+//  Render<TProduto>(TProduto.Select);
+end;
+
+procedure TControllerProduto.UpdateProduto(ctx: TWebContext);
+var
+  Produto: TProduto;
+begin
+  Produto := ctx.Request.BodyAs<TProduto>;
+  try
+//    if TProduto.UpdateFromDataSet(ctx.Request.Params['id'].ToInt, Produto) then
+      Render(200, 'Produto atualizado com sucesso.');
+//    else
+//      Render(404, 'Produto não encontrado.');
+  finally
+    Produto.Free;
+  end;
+end;
+
+end.

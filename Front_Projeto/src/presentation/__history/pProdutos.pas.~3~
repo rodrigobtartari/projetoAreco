@@ -1,0 +1,112 @@
+unit pProdutos;
+
+interface
+
+uses
+  Winapi.Windows,
+  Winapi.Messages,
+  System.SysUtils,
+  System.Variants,
+  System.Classes,
+  Vcl.Graphics,
+  Vcl.Controls,
+  Vcl.Forms,
+  Vcl.Dialogs,
+  Data.DB,
+  Vcl.StdCtrls,
+  Vcl.Grids,
+  Vcl.DBGrids,
+  FireDAC.Stan.Intf,
+  FireDAC.Stan.Option,
+  FireDAC.Stan.Param,
+  FireDAC.Stan.Error,
+  FireDAC.DatS,
+  FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf,
+  FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client,
+  bProdutos,
+  pOperaProduto,
+  dmData;
+
+type
+  TfrmProdutos = class(TForm)
+    dbGradeProdutos: TDBGrid;
+    btAtualizar: TButton;
+    lbListagem: TLabel;
+    GroupBox1: TGroupBox;
+    btCadastro: TButton;
+    btEditar: TButton;
+    btExcluir: TButton;
+    procedure btAtualizarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure criaCadOuEditaProd(funcao : TObject);
+  private
+    { Private declarations }
+    bProd : TProdutos;
+    pOpProduto : TfrmOperacoes;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmProdutos: TfrmProdutos;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmProdutos.btAtualizarClick(Sender: TObject);
+begin
+  bProd.atualizaRegistros;
+end;
+
+procedure TfrmProdutos.FormCreate(Sender: TObject);
+begin
+  bProd := TProdutos.Create;
+end;
+
+procedure TfrmProdutos.criaCadOuEditaProd(funcao: TObject);
+
+var id,qtde : Integer;
+    nome : string;
+    valor : double;
+
+begin
+  try
+    try
+      // Cria o Objeto
+      pOpProduto := TfrmOperacoes.Create(Nil);
+
+      // De acordo com o Botão inicializa o form de operar produto de forma diferente
+      if (funcao as TButton).Name = 'btCadastro' then begin
+
+        pOpProduto.Caption      := 'Cadastrar Produto';
+        pOpProduto.lbID.Visible := False;
+        pOpProduto.edID.Visible := False;
+      end else if (funcao as TButton).Name = 'btEditar' then begin
+        // Não deixo alterar a ID do Produto
+        pOpProduto.lbID.Enabled := False;
+        pOpProduto.Caption := 'Editar Produto';
+      end;
+
+      pOpProduto.ShowModal;
+
+      if pOpProduto.ModalResult = 0 then begin
+        exit;
+      end else if pOpProduto.ModalResult = 8 then
+        ShowMessage('Cancelado pelo usuário.')
+      else
+        ShowMessage('Gravado/Alterado com Sucesso.');
+    except
+      on e: exception do
+      raise Exception.Create('Erro ao Criar/Alterar produto.');
+    end;
+  finally
+    // libera o objeto
+    pOpProduto.Free;
+  end;
+end;
+
+
+end.

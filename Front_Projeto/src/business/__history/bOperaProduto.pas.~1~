@@ -1,0 +1,71 @@
+unit bOperaProduto;
+
+interface
+
+uses
+  Vcl.StdCtrls,
+  Vcl.Dialogs,
+  System.StrUtils,
+  System.SysUtils,
+  pOperaProduto;
+
+type
+  TOperaProduto = class(TObject)
+  mproduto : TfrmOperacoes;
+  private
+
+  public
+    // Cria o formulário para cadastro ou edição do Produto
+    procedure criaCadOuEditaProd(funcao : TObject);
+  end;
+
+implementation
+
+{ TOperaProduto }
+
+procedure TOperaProduto.criaCadOuEditaProd(funcao: TObject);
+
+var id,qtde : Integer;
+    nome : string;
+    valor : double;
+
+begin
+  try
+    try
+      // Cria o Objeto
+      mProduto := TfrmOperacoes.Create(Nil);
+
+      // De acordo com o Botão inicializa o form de operar produto de forma diferente
+      if (funcao as TButton).Name = 'btCadastro' then begin
+
+        mProduto.Caption      := 'Cadastrar Produto';
+        mProduto.lbID.Visible := False;
+        mProduto.edID.Visible := False;
+      end else if (funcao as TButton).Name = 'btEditar' then begin
+
+        // Não deixo alterar a ID do Produto
+        mProduto.lbID.Enabled := False;
+
+        mProduto.Caption           := 'Editar Produto';
+
+      end;
+
+      mProduto.ShowModal;
+
+      if mProduto.ModalResult = 0 then begin
+        exit;
+      end else begin
+
+          ShowMessage('Gravado/Alterado com Sucesso.');
+
+      end;
+    except
+      raise Exception.Create('Erro ao Criar/Alterar produto.');
+    end;
+  finally
+    // libera o objeto
+    mProduto.Free;
+  end;
+end;
+
+end.

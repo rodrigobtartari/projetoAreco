@@ -1,0 +1,20 @@
+program ListaProdutos;
+
+uses
+  Vcl.Forms,
+  pProdutos in 'pProdutos.pas' {frmProdutos},
+  bProdutos in 'bProdutos.pas',
+  pOperaProduto in 'pOperaProduto.pas' {frmOperacoes},
+  bOperaProduto in 'bOperaProduto.pas',
+  dmData in '..\src\data\dmData.pas' {DataModule1: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmProdutos, frmProdutos);
+  Application.CreateForm(TfrmOperacoes, frmOperacoes);
+  Application.CreateForm(TDataModule1, DataModule1);
+  Application.Run;
+end.

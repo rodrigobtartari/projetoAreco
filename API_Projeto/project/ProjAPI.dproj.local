@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2023/06/04 18:21:20.000.390,=C:\Users\rodri\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2023/06/07 14:02:02.000.903,=C:\Users\rodri\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/03/06 12:54:18.000.306,=C:\Users\rodri\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/03/06 12:54:22.000.104,=C:\Users\rodri\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2024/03/06 13:01:08.000.986,C:\Users\rodri\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.pas=D:\Dev\Projeto\SRC\Controller\Controller.Customer.pas</Transaction>
+    <Transaction>2024/03/06 13:01:45.000.785,C:\Users\rodri\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit2.dfm=D:\Dev\Projeto\SRC\Services\WebModule.Main.dfm</Transaction>
+    <Transaction>2024/03/06 13:01:45.000.785,C:\Users\rodri\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit2.pas=D:\Dev\Projeto\SRC\Services\WebModule.Main.pas</Transaction>
+    <Transaction>2024/03/06 13:02:46.000.136,C:\Users\rodri\OneDrive\Documentos\Embarcadero\Studio\Projects\Project1.dproj=D:\Dev\Projeto\project\ProjAPI.dproj</Transaction>
+    <Transaction>2024/03/06 15:46:05.000.544,=D:\Dev\Projeto\project\Unit1.pas</Transaction>
+    <Transaction>2024/03/06 15:49:23.000.065,D:\Dev\Projeto\SRC\Controller\Controller.Produto.pas=D:\Dev\Projeto\SRC\Controller\Controller.Customer.pas</Transaction>
+    <Transaction>2024/03/06 15:52:28.000.878,D:\Dev\Projeto\SRC\Entity.Produto.pas=D:\Dev\Projeto\project\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>

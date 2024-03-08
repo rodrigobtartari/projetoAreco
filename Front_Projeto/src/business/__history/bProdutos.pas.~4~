@@ -1,0 +1,85 @@
+unit bProdutos;
+
+interface
+
+uses
+  System.SysUtils,
+  Vcl.StdCtrls,
+  Vcl.Dialogs,
+  pOperaProduto;
+
+type
+  TProdutos = Class(TObject)
+  private
+  pOpProduto : TfrmOperacoes;
+  public
+    procedure atualizaRegistros;
+    procedure criaCadOuEditaProd(funcao: TObject);
+  End;
+
+implementation
+
+uses
+  dmData;
+
+{ TProdutos }
+
+procedure TProdutos.atualizaRegistros;
+begin
+  mData.mtProdutos.Close;
+  mData.mtProdutos.Open;
+end;
+
+procedure TProdutos.criaCadOuEditaProd(funcao: TObject);
+
+var id,qtde : Integer;
+    nome : string;
+    valor : double;
+
+begin
+  try
+    try
+      // Cria o Objeto
+      pOpProduto := TfrmOperacoes.Create(Nil);
+
+      // De acordo com o Botão inicializa o form de operar produto de forma diferente
+      if (funcao as TButton).Name = 'btCadastro' then begin
+        pOpProduto.Caption      := 'Cadastrar Produto';
+        pOpProduto.lbID.Visible := False;
+        pOpProduto.edID.Visible := False;
+      end else if (funcao as TButton).Name = 'btEditar' then begin
+        // Não deixo alterar a ID do Produto
+        pOpProduto.lbID.Enabled := False;
+        pOpProduto.Caption := 'Editar Produto';
+      end;
+
+      pOpProduto.ShowModal;
+
+      if pOpProduto.ModalResult = 0 then begin
+        exit;
+      end else if pOpProduto.ModalResult = 8 then
+        ShowMessage('Cancelado pelo usuário.')
+      else
+      begin
+        try
+          if (funcao as TButton).Name = 'btCadastro' then begin
+            mData.mtProdutos.Insert;
+            mData.mtProdutos
+          end else if (funcao as TButton).Name = 'btEditar' then begin
+
+          end;
+        finally
+          ShowMessage('Gravado/Alterado com Sucesso.');
+        end;
+      end;
+    except
+      on e: exception do
+      raise Exception.Create('Erro ao Criar/Alterar produto.');
+    end;
+  finally
+    // libera o objeto
+    pOpProduto.Free;
+  end;
+end;
+
+end.

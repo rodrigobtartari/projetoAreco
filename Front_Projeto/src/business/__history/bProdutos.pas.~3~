@@ -1,0 +1,29 @@
+unit bProdutos;
+
+interface
+
+uses
+  System.SysUtils;
+
+type
+  TProdutos = Class(TObject)
+  private
+
+  public
+    procedure atualizaRegistros;
+  End;
+
+implementation
+
+uses
+  dmData;
+
+{ TProdutos }
+
+procedure TProdutos.atualizaRegistros;
+begin
+  mData.mtProdutos.Close;
+  mData.mtProdutos.Open;
+end;
+
+end.

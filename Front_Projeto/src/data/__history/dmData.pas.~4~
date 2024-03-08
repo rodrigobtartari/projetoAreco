@@ -1,0 +1,149 @@
+unit dmData;
+
+interface
+
+uses
+  System.SysUtils,
+  System.Classes,
+  Winapi.Windows,
+  Winapi.Messages,
+  FireDAC.Stan.Intf,
+  FireDAC.Stan.Option,
+  FireDAC.Stan.Param,
+  FireDAC.Stan.Error,
+  FireDAC.DatS,
+  FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf,
+  Data.DB,
+  FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client,
+  MVCFramework.RESTClient.Intf,
+  MVCFramework.RESTClient;
+
+type
+  TmData = class(TDataModule)
+    dsProdutos: TDataSource;
+    mtProdutos: TFDMemTable;
+    mtProdutosid: TIntegerField;
+    mtProdutoscode: TStringField;
+    mtProdutosdescription: TStringField;
+    mtProdutosprice: TCurrencyField;
+    procedure mtProdutosAfterOpen(DataSet: TDataSet);
+    procedure mtProdutosBeforeDelete(DataSet: TDataSet);
+    procedure mtProdutosBeforePost(DataSet: TDataSet);
+    procedure mtProdutosBeforeRefresh(DataSet: TDataSet);
+    procedure mtProdutosBeforeRowRequest(DataSet: TFDDataSet);
+  private
+    { Private declarations }
+    fFilter: string;
+    fLoading: Boolean;
+    fRESTClient: IMVCRESTClient;
+    procedure SetFilter(const Value: string);
+  public
+    { Public declarations }
+  end;
+
+var
+  mData: TmData;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+uses
+  MVCFramework.DataSet.Utils;
+
+{$R *.dfm}
+
+procedure TmData.mtProdutosAfterOpen(DataSet: TDataSet);
+var
+  Res: IMVCRESTResponse;
+begin
+  if fFilter.IsEmpty then
+  begin
+    // this a simple sychronous request...
+    Res := fRESTClient.Get('/produtos');
+  end
+  else
+  begin
+    Res := fRESTClient
+      .AddQueryStringParam('q', fFilter)
+      .Get('/articles/searches');
+  end;
+
+  if not Res.Success then
+  begin
+    ShowError(Res);
+    Exit;
+  end;
+
+  DataSet.DisableControls;
+  try
+    fLoading := true;
+    mtProdutos.LoadJSONArrayFromJSONObjectProperty('data', Res.Content);
+    fLoading := false;
+    mtProdutos.First;
+  finally
+    DataSet.EnableControls;
+  end;
+end;
+
+procedure TmData.mtProdutosBeforeDelete(DataSet: TDataSet);
+var
+  Res: IMVCRESTResponse;
+begin
+  if mtProdutos.State = dsBrowse then
+    Res := fRESTClient.DataSetDelete('/articles', mtProdutosid.AsString);
+  if not(Res.StatusCode in [200]) then
+  begin
+    ShowError(Res);
+    Abort;
+  end;
+end;
+
+procedure TmData.mtProdutosBeforePost(DataSet: TDataSet);
+var
+  Res: IMVCRESTResponse;
+begin
+  if not fLoading then
+  begin
+    if mtProdutos.State = dsInsert then
+      Res := fRESTClient.DataSetInsert('/articles', mtProdutos)
+    else
+      Res := fRESTClient.DataSetUpdate('/articles', mtProdutosid.AsString, mtProdutos);
+    if not(Res.StatusCode in [200, 201]) then
+    begin
+      ShowError(Res);
+      Abort;
+    end
+    else
+    begin
+      DataSet.Refresh;
+    end;
+  end;
+end;
+
+procedure TmData.mtProdutosBeforeRefresh(DataSet: TDataSet);
+begin
+  DataSet.Close;
+  DataSet.Open;
+end;
+
+procedure TmData.mtProdutosBeforeRowRequest(DataSet: TFDDataSet);
+var
+  Res: IMVCRESTResponse;
+begin
+  Res := fRESTClient
+    .AddPathParam('param1', DataSet.FieldByName('id').AsString)
+    .Get('/articles/{param1}');
+  fLoading := true;
+  DataSet.LoadJSONObjectFromJSONObjectProperty('data', Res.Content);
+  fLoading := false;
+end;
+
+procedure TmData.SetFilter(const Value: string);
+begin
+  fFilter := Value;
+end;
+
+end.

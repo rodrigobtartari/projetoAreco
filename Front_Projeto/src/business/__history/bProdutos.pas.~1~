@@ -1,0 +1,26 @@
+unit bProdutos;
+
+interface
+
+uses
+  System.SysUtils;
+
+type
+  TProdutos = Class(TObject)
+    pProd : TfrmProdutos;
+  public
+    constructor create;
+  End;
+
+implementation
+
+{ TProdutos }
+
+constructor TProdutos.create;
+begin
+
+end;
+
+
+
+end.

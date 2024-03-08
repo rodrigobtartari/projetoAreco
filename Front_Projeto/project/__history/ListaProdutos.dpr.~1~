@@ -1,0 +1,18 @@
+program ListaProdutos;
+
+uses
+  Vcl.Forms,
+  pProdutos in 'pProdutos.pas' {frmProdutos},
+  bProdutos in 'bProdutos.pas',
+  pOperaProduto in 'pOperaProduto.pas' {frmOperacoes},
+  bOperaProduto in 'bOperaProduto.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmProdutos, frmProdutos);
+  Application.CreateForm(TfrmOperacoes, frmOperacoes);
+  Application.Run;
+end.

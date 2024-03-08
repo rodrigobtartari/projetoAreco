@@ -1,0 +1,52 @@
+object DataModule1: TDataModule1
+  Left = 0
+  Top = 0
+  ClientHeight = 55
+  ClientWidth = 164
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  TextHeight = 15
+  object dsProdutos: TDataSource
+    DataSet = mtProdutos
+    Left = 104
+    Top = 16
+  end
+  object mtProdutos: TFDMemTable
+    FieldDefs = <>
+    IndexDefs = <>
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired]
+    UpdateOptions.CheckRequired = False
+    StoreDefs = True
+    Left = 24
+    Top = 16
+    object mtProdutosid: TIntegerField
+      FieldName = 'id'
+    end
+    object mtProdutoscode: TStringField
+      FieldName = 'code'
+    end
+    object mtProdutosdescription: TStringField
+      FieldName = 'description'
+      Size = 50
+    end
+    object mtProdutosprice: TCurrencyField
+      FieldName = 'price'
+    end
+    object mtProdutoscreatedat: TDateTimeField
+      AutoGenerateValue = arDefault
+      FieldName = 'createdat'
+    end
+    object mtProdutosupdatedat: TDateTimeField
+      AutoGenerateValue = arDefault
+      FieldName = 'updatedat'
+    end
+  end
+end

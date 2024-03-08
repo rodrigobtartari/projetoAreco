@@ -1,0 +1,45 @@
+unit bProdutos;
+
+interface
+
+uses
+  System.SysUtils,
+  Vcl.Dialogs,
+  MVCFramework.RESTClient;
+
+type
+  TProdutos = Class(TObject)
+  private
+    procedure doError(const AResponse: IMVCRESTResponse);
+  public
+    procedure atualizaRegistros;
+  End;
+
+implementation
+
+uses
+  dmData;
+
+{ TProdutos }
+
+procedure TProdutos.atualizaRegistros;
+begin
+  mData.mtProdutos.Close;
+  mData.mtProdutos.Open;
+end;
+
+procedure TProdutos.doError(const AResponse: IMVCRESTResponse);
+begin
+  if not AResponse.Success then
+    MessageDlg(
+      AResponse.StatusCode.ToString + ': ' + AResponse.StatusText + sLineBreak +
+      '[' + AResponse.Content + ']',
+      mtError, [mbOK], 0)
+  else
+    MessageDlg(
+      AResponse.StatusCode.ToString + ': ' + AResponse.StatusText + sLineBreak +
+      AResponse.Content,
+      mtError, [mbOK], 0);
+end;
+
+end.
