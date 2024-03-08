@@ -36,7 +36,3 @@ Em um grid na tela principal são exibidos os registros, e possuimos botões par
 em um formulário para digitação das informações a serem gravadas e a exclusão é feita na própria tela principal.
 
 Qualquer dúvida ou problema estou à disposição
-
-Para contato:
-(19) 99406-9873
-rodrigo.btartari@outlook.com
